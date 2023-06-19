@@ -31,6 +31,8 @@
 
   const onStrikeIndex = ref(1)
 
+  const maxBatsmanIndex = ref(1)
+
   const toggleStrike = () => {
     let playerId = currentBatsmen.value[onStrikeIndex.value].id
     removeStrike(playerId)
@@ -76,6 +78,17 @@
     }
   }
 
+  const addWicket = (index) => {
+    addBall(0, index)
+    const batter = currentBatsmen.value[index]
+    batter.isOut = true
+    batter.isBatting = false
+    totalWickets.value++
+    const nextBatter = players.value[maxBatsmanIndex.value + 1]
+    maxBatsmanIndex.value++
+    nextBatter.isBatting = true
+  }
+
   const formatOvers = computed(() => {
     const completeOvers = Math.floor(balls.value.length / 6)
     const currentOverBalls = balls.value.length % 6
@@ -83,10 +96,13 @@
   })
 
   const totalRuns = ref(0)
+
+  const totalWickets = ref(0)
 </script>
 
 <template>
   <h1>Cricket Scoring</h1>
+  <hr />
   <h3>Add players</h3>
   <form @submit.prevent="addPlayer">
     <input v-model="newPlayer.firstName" placeholder="First name">
@@ -104,6 +120,8 @@
 
   <p>{{ matchStarted ? "Match started" : "Match not started" }}</p>
 
+  <hr />
+
   <h3>Live scoring</h3>
   <h4>Current batsmen</h4>
   <ul>
@@ -119,24 +137,29 @@
       <td><button @click="addBall(4, onStrikeIndex)">4</button></td>
       <td><button @click="addBall(5, onStrikeIndex)">5</button></td>
       <td><button @click="addBall(6, onStrikeIndex)">6</button></td>
+      <td><button @click="addWicket(onStrikeIndex)">W</button></td>
     </tr>
   </table>
 
+  <hr />
+  
   <h3>Scorecard</h3>
   <table v-if="matchStarted">
     <tr>
       <th>Player</th>
+      <th>Out</th>
       <th>Runs</th>
       <th>Balls</th>
     </tr>
     <tr v-for="player in players">
       <td>{{ player.firstName }} {{ player.lastName }}</td>
+      <td>{{ player.isOut ? player.isOut : null }}</td>
       <td>{{ player.runs }}</td>
       <td>{{ player.ballsFaced }}</td>
     </tr>
   </table>
 
-  <strong v-if="matchStarted">Total runs: {{ totalRuns }}</strong>
+  <strong v-if="matchStarted">Score: {{ totalWickets }}/{{ totalRuns }}</strong>
   <br />
   <strong v-if="matchStarted">Overs: {{ formatOvers }}</strong>
 
