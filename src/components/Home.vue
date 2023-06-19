@@ -73,7 +73,11 @@
     batter.ballsFaced++
     totalRuns.value += runs
 
-    if (runs % 2 === 1 || balls.value.length % 6 === 0) {
+    if (runs % 2 === 1) {
+      toggleStrike()
+    }
+
+    if (balls.value.length % 6 === 0) {
       toggleStrike()
     }
   }
@@ -144,18 +148,18 @@
   <hr />
   
   <h3>Scorecard</h3>
-  <table v-if="matchStarted">
+  <table v-if="matchStarted" class="scorecard">
     <tr>
-      <th>Player</th>
-      <th>Out</th>
-      <th>Runs</th>
-      <th>Balls</th>
+      <th class="scorecard">Player</th>
+      <th class="scorecard">Out</th>
+      <th class="scorecard">Runs</th>
+      <th class="scorecard">Balls</th>
     </tr>
     <tr v-for="player in players">
-      <td>{{ player.firstName }} {{ player.lastName }}</td>
-      <td>{{ player.isOut ? player.isOut : null }}</td>
-      <td>{{ player.runs }}</td>
-      <td>{{ player.ballsFaced }}</td>
+      <td class="scorecard">{{ player.firstName }} {{ player.lastName }}</td>
+      <td class="scorecard">{{ player.isOut ? player.isOut : null }}</td>
+      <td class="scorecard">{{ player.runs }}</td>
+      <td class="scorecard">{{ player.ballsFaced }}</td>
     </tr>
   </table>
 
