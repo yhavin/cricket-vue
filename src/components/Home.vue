@@ -5,28 +5,11 @@
   const newPlayer = ref({})
 
   const players = ref([
-    { id: playerId++, firstName: "Player", lastName: "1", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "2", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "3", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "4", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "5", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "6", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "7", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "8", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "9", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "10", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "11", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "12", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "13", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "14", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "15", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "16", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "17", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "18", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "19", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "20", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "21", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "22", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null }
+    { id: playerId++, firstName: "Reuvy", lastName: "Havin", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Dovi", lastName: "Paltiel", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Nochum", lastName: "Paltiel", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Yakir", lastName: "Havin", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Menachem", lastName: "Loebenstein", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null }
   ])
 
   const teamOne = computed(() => {
@@ -38,7 +21,7 @@
   })
 
   const addPlayer = () => {
-    players.value.push({ id: playerId++, firstName: newPlayer.value.firstName, lastName: newPlayer.value.lastName })
+    players.value.push({ id: playerId++, firstName: newPlayer.value.firstName, lastName: newPlayer.value.lastName, team: Number(newPlayer.value.team), isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null })
     newPlayer.value = {}
   }
 
@@ -92,7 +75,7 @@
   const balls = ref([])
 
   const thisOver = computed(() => {
-    const currentOverBalls = balls.value.length % 2
+    const currentOverBalls = balls.value.length % 6
     const thisOverBallObjects = balls.value.slice(-currentOverBalls)
     const runsThisOver = thisOverBallObjects.map(ball => ball.isWicket ? "W" : ball.runs)
     return runsThisOver
@@ -144,30 +127,21 @@
   <form @submit.prevent="addPlayer">
     <input v-model="newPlayer.firstName" placeholder="First name">
     <input v-model="newPlayer.lastName" placeholder="Last name">
+    <input v-model="newPlayer.team" placeholder="Team">
     <button>Add player</button>
   </form>
+  <br />
 
-  <!-- <ol>
-    <li v-for="player in players" :key="player.id">
-      {{ player.firstName }} {{ player.lastName }}
-      <button @click="removePlayer(player)">X</button>
-    </li>
-  </ol> -->
-
-  <table>
+  <table class="table-outline">
     <tr>
-      <th>Team 1</th>
-      <th>Team 2</th>
+      <th class="table-outline">Team 1</th>
+      <th class="table-outline">Team 2</th>
     </tr>
-    <tr v-for="(player, index) in teamOne" :key="index">
-      <td>{{ teamOne[index].firstName }} {{ teamOne[index].lastName }}</td>
-      <td>{{ teamTwo[index].firstName }} {{ teamTwo[index].lastName }}</td>
+    <tr v-for="(player, index) in teamOne.length > teamTwo.length ? teamOne : teamTwo" :key="index">
+      <td class="table-outline">{{ teamOne[index]?.firstName }} {{ teamOne[index]?.lastName }}</td>
+      <td class="table-outline">{{ teamTwo[index]?.firstName }} {{ teamTwo[index]?.lastName }}</td>
     </tr>
   </table>
-
-  <button @click="startMatch">{{ matchStarted ? "End match" : "Start match" }} </button>
-
-  <p>{{ matchStarted ? "Match started" : "Match not started" }}</p>
 
   <hr />
 
@@ -175,7 +149,7 @@
   <h4>Current batsmen</h4>
   <ul>
     <li v-for="(player, index) in currentBatsmen" :key="player.id" :class="{'on-strike': index === onStrikeIndex}">
-    <span :style="{fontWeight: index === onStrikeIndex ? 'bold' : 'normal'}">{{ player.firstName }} {{ player.lastName }}</span>
+    <span :style="{fontWeight: index === onStrikeIndex ? 'bold' : 'normal'}">{{ player.firstName }} {{ player.lastName }}: {{ player.runs }} ({{ player.ballsFaced }})</span>
     </li>
   </ul>
   <table>
@@ -194,20 +168,23 @@
   <hr />
   
   <h2>Scorecard</h2>
-  <table v-if="matchStarted" class="scorecard">
+  <button @click="startMatch">{{ matchStarted ? "End match" : "Start match" }} </button>
+  <p>{{ matchStarted ? "Match started" : "Match not started" }}</p>
+  <table v-if="matchStarted" class="table-outline">
     <tr>
-      <th class="scorecard">Player</th>
-      <th class="scorecard">Out</th>
-      <th class="scorecard">Runs</th>
-      <th class="scorecard">Balls</th>
+      <th class="table-outline">Player</th>
+      <th class="table-outline">Out</th>
+      <th class="table-outline">Runs</th>
+      <th class="table-outline">Balls</th>
     </tr>
     <tr v-for="player in teamOne">
-      <td class="scorecard">{{ player.firstName }} {{ player.lastName }}</td>
-      <td class="scorecard">{{ player.isOut ? player.isOut : null }}</td>
-      <td class="scorecard">{{ player.runs }}</td>
-      <td class="scorecard">{{ player.ballsFaced }}</td>
+      <td class="table-outline">{{ player.firstName }} {{ player.lastName }}</td>
+      <td class="table-outline">{{ player.isOut ? player.isOut : null }}</td>
+      <td class="table-outline">{{ player.runs }}</td>
+      <td class="table-outline">{{ player.ballsFaced }}</td>
     </tr>
   </table>
+  <br />
 
   <strong v-if="matchStarted">Score: {{ totalWickets }}/{{ totalRuns }}</strong>
   <br />
