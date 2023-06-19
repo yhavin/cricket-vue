@@ -66,9 +66,17 @@
   const newBall = ref({})
   const balls = ref([])
 
-  const addBall = (runs, index) => {
+  const thisOver = computed(() => {
+    const currentOverBalls = balls.value.length % 6
+    console.log(currentOverBalls)
+    const thisOverBallObjects = balls.value.slice(-currentOverBalls)
+    const runsThisOver = thisOverBallObjects.map(ball => ball.isWicket ? "W" : ball.runs)
+    return runsThisOver
+  })
+
+  const addBall = (runs, index, isWicket=false) => {
     const batter = currentBatsmen.value[index]
-    balls.value.push({ id: ballId++, runs: runs, batterId: batter.id })
+    balls.value.push({ id: ballId++, runs: runs, batterId: batter.id, isWicket: isWicket })
     batter.runs += runs
     batter.ballsFaced++
     totalRuns.value += runs
@@ -83,7 +91,7 @@
   }
 
   const addWicket = (index) => {
-    addBall(0, index)
+    addBall(0, index, true)
     const batter = currentBatsmen.value[index]
     batter.isOut = true
     batter.isBatting = false
@@ -135,6 +143,7 @@
   </ul>
   <table>
     <tr>
+      <td><button @click="addBall(0, onStrikeIndex)">0</button></td>
       <td><button @click="addBall(1, onStrikeIndex)">1</button></td>
       <td><button @click="addBall(2, onStrikeIndex)">2</button></td>
       <td><button @click="addBall(3, onStrikeIndex)">3</button></td>
@@ -166,6 +175,8 @@
   <strong v-if="matchStarted">Score: {{ totalWickets }}/{{ totalRuns }}</strong>
   <br />
   <strong v-if="matchStarted">Overs: {{ formatOvers }}</strong>
+  <br />
+  <strong v-if="matchStarted">This over: {{ thisOver.join(", ") }}</strong>
 
 </template>
 
