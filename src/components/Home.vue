@@ -5,11 +5,12 @@
   const newPlayer = ref({})
 
   const players = ref([
-    { id: playerId++, firstName: "Reuvy", lastName: "Havin", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Dovi", lastName: "Paltiel", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Nochum", lastName: "Paltiel", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Yakir", lastName: "Havin", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Menachem", lastName: "Loebenstein", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null }
+    { id: playerId++, firstName: "Player", lastName: "1", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "2", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "3", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "4", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "5", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "6", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null }
   ])
 
   const teamOne = computed(() => {
@@ -170,7 +171,8 @@
   
   <h2>Scorecard</h2>
   <button @click="startMatch">{{ matchStarted ? "End match" : "Start match" }} </button>
-  <p>{{ matchStarted ? "Match started" : "Match not started" }}</p>
+  <br />
+  <br />
   <table v-if="matchStarted" class="table-outline">
     <tr>
       <th class="table-outline">Player</th>
