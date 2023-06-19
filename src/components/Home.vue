@@ -152,6 +152,7 @@
     <span :style="{fontWeight: index === onStrikeIndex ? 'bold' : 'normal'}">{{ player.firstName }} {{ player.lastName }}: {{ player.runs }} ({{ player.ballsFaced }})</span>
     </li>
   </ul>
+  <h4>Enter ball event</h4>
   <table>
     <tr>
       <td><button @click="addBall(0, onStrikeIndex)">0</button></td>
