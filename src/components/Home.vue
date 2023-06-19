@@ -5,12 +5,37 @@
   const newPlayer = ref({})
 
   const players = ref([
-    { id: playerId++, firstName: "Yakir", lastName: "Havin", isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Reuvy", lastName: "Havin", isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Nochum", lastName: "Paltiel", isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Dovi", lastName: "Paltiel", isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Menachem", lastName: "Loebenstein", isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null }
+    { id: playerId++, firstName: "Player", lastName: "1", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "2", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "3", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "4", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "5", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "6", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "7", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "8", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "9", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "10", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "11", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "12", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "13", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "14", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "15", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "16", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "17", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "18", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "19", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "20", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "21", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Player", lastName: "22", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null }
   ])
+
+  const teamOne = computed(() => {
+    return players.value.filter(p => p.team === 1)
+  })
+
+  const teamTwo = computed(() => {
+    return players.value.filter(p => p.team === 2)
+  })
 
   const addPlayer = () => {
     players.value.push({ id: playerId++, firstName: newPlayer.value.firstName, lastName: newPlayer.value.lastName })
@@ -67,8 +92,7 @@
   const balls = ref([])
 
   const thisOver = computed(() => {
-    const currentOverBalls = balls.value.length % 6
-    console.log(currentOverBalls)
+    const currentOverBalls = balls.value.length % 2
     const thisOverBallObjects = balls.value.slice(-currentOverBalls)
     const runsThisOver = thisOverBallObjects.map(ball => ball.isWicket ? "W" : ball.runs)
     return runsThisOver
@@ -110,31 +134,44 @@
   const totalRuns = ref(0)
 
   const totalWickets = ref(0)
+
 </script>
 
 <template>
   <h1>Cricket Scoring</h1>
   <hr />
-  <h3>Add players</h3>
+  <h2>Add players</h2>
   <form @submit.prevent="addPlayer">
     <input v-model="newPlayer.firstName" placeholder="First name">
     <input v-model="newPlayer.lastName" placeholder="Last name">
     <button>Add player</button>
   </form>
-  <ol>
+
+  <!-- <ol>
     <li v-for="player in players" :key="player.id">
       {{ player.firstName }} {{ player.lastName }}
       <button @click="removePlayer(player)">X</button>
     </li>
-  </ol>
+  </ol> -->
 
-  <button @click="startMatch">Start match</button>
+  <table>
+    <tr>
+      <th>Team 1</th>
+      <th>Team 2</th>
+    </tr>
+    <tr v-for="(player, index) in teamOne" :key="index">
+      <td>{{ teamOne[index].firstName }} {{ teamOne[index].lastName }}</td>
+      <td>{{ teamTwo[index].firstName }} {{ teamTwo[index].lastName }}</td>
+    </tr>
+  </table>
+
+  <button @click="startMatch">{{ matchStarted ? "End match" : "Start match" }} </button>
 
   <p>{{ matchStarted ? "Match started" : "Match not started" }}</p>
 
   <hr />
 
-  <h3>Live scoring</h3>
+  <h2>Live scoring</h2>
   <h4>Current batsmen</h4>
   <ul>
     <li v-for="(player, index) in currentBatsmen" :key="player.id" :class="{'on-strike': index === onStrikeIndex}">
@@ -156,7 +193,7 @@
 
   <hr />
   
-  <h3>Scorecard</h3>
+  <h2>Scorecard</h2>
   <table v-if="matchStarted" class="scorecard">
     <tr>
       <th class="scorecard">Player</th>
@@ -164,7 +201,7 @@
       <th class="scorecard">Runs</th>
       <th class="scorecard">Balls</th>
     </tr>
-    <tr v-for="player in players">
+    <tr v-for="player in teamOne">
       <td class="scorecard">{{ player.firstName }} {{ player.lastName }}</td>
       <td class="scorecard">{{ player.isOut ? player.isOut : null }}</td>
       <td class="scorecard">{{ player.runs }}</td>
