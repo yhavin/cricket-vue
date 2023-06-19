@@ -107,8 +107,8 @@
   <h3>Live scoring</h3>
   <h4>Current batsmen</h4>
   <ul>
-    <li v-for="player in currentBatsmen" :key="player.id">
-    {{ player.firstName }} {{ player.lastName }} {{ player.isOnStrike }}
+    <li v-for="(player, index) in currentBatsmen" :key="player.id" :class="{'on-strike': index === onStrikeIndex}">
+    <span :style="{fontWeight: index === onStrikeIndex ? 'bold' : 'normal'}">{{ player.firstName }} {{ player.lastName }}</span>
     </li>
   </ul>
   <table>
@@ -141,3 +141,9 @@
   <strong v-if="matchStarted">Overs: {{ formatOvers }}</strong>
 
 </template>
+
+<style>
+  .on-strike {
+    font-weight: bold;
+  }
+</style>
