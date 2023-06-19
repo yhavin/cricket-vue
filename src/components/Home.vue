@@ -5,11 +5,11 @@
   const newPlayer = ref({})
 
   const players = ref([
-    { id: playerId++, firstName: "Yakir", lastName: "Havin", gamesPlayed: [] },
-    { id: playerId++, firstName: "Reuvy", lastName: "Havin", gamesPlayed: [] },
-    { id: playerId++, firstName: "Nochum", lastName: "Paltiel", gamesPlayed: [] },
-    { id: playerId++, firstName: "Dovi", lastName: "Paltiel", gamesPlayed: [] },
-    { id: playerId++, firstName: "Menachem", lastName: "Loebenstein", gamesPlayed: [] }
+    { id: playerId++, firstName: "Yakir", lastName: "Havin", isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Reuvy", lastName: "Havin", isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Nochum", lastName: "Paltiel", isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Dovi", lastName: "Paltiel", isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Menachem", lastName: "Loebenstein", isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null }
   ])
 
   const addPlayer = () => {
@@ -21,20 +21,68 @@
     players.value = players.value.filter((p) => p !== player)
   }
 
+  const setIsBatting = (index) => {
+    players.value[index].isBatting = true
+  }
+
+  const currentBatsmen = computed(() => {
+    return players.value.filter(p => p.isBatting)
+  })
+
+  const onStrikeIndex = ref(1)
+
+  const toggleStrike = () => {
+    let playerId = currentBatsmen.value[onStrikeIndex.value].id
+    removeStrike(playerId)
+
+    onStrikeIndex.value = 1 - onStrikeIndex.value
+    playerId = currentBatsmen.value[onStrikeIndex.value].id
+    setStrike(playerId)
+  }
+
+  const setStrike = (id) => {
+    const player = currentBatsmen.value.find(p => p.id === id)
+    player.isOnStrike = true
+  }
+
+  const removeStrike = (id) => {
+    const player = currentBatsmen.value.find(p => p.id === id)
+    player.isOnStrike = false
+  }
+  
   const matchStarted = ref(false)
 
   const startMatch = () => {
   matchStarted.value = true
-  console.log(matchStarted.value)
+  setIsBatting(0)
+  setIsBatting(1)
+  toggleStrike()
   }
 
   let ballId = 0
+  const onStrikeId = ref('')
   const newBall = ref({})
   const balls = ref([])
 
-  const addBall = (runs) => {
-    balls.value.push({ id: ballId++, runs: runs.value })
+  const addBall = (runs, index) => {
+    const batter = currentBatsmen.value[index]
+    balls.value.push({ id: ballId++, runs: runs, batterId: batter.id })
+    batter.runs += runs
+    batter.ballsFaced++
+    totalRuns.value += runs
+
+    if (runs % 2 === 1 || balls.value.length % 6 === 0) {
+      toggleStrike()
+    }
   }
+
+  const formatOvers = computed(() => {
+    const completeOvers = Math.floor(balls.value.length / 6)
+    const currentOverBalls = balls.value.length % 6
+    return completeOvers + "." + currentOverBalls
+  })
+
+  const totalRuns = ref(0)
 </script>
 
 <template>
@@ -45,19 +93,36 @@
     <input v-model="newPlayer.lastName" placeholder="Last name">
     <button>Add player</button>
   </form>
-  <ul>
+  <ol>
     <li v-for="player in players" :key="player.id">
       {{ player.firstName }} {{ player.lastName }}
       <button @click="removePlayer(player)">X</button>
     </li>
-  </ul>
+  </ol>
 
   <button @click="startMatch">Start match</button>
 
   <p>{{ matchStarted ? "Match started" : "Match not started" }}</p>
 
   <h3>Live scoring</h3>
+  <h4>Current batsmen</h4>
+  <ul>
+    <li v-for="player in currentBatsmen" :key="player.id">
+    {{ player.firstName }} {{ player.lastName }} {{ player.isOnStrike }}
+    </li>
+  </ul>
+  <table>
+    <tr>
+      <td><button @click="addBall(1, onStrikeIndex)">1</button></td>
+      <td><button @click="addBall(2, onStrikeIndex)">2</button></td>
+      <td><button @click="addBall(3, onStrikeIndex)">3</button></td>
+      <td><button @click="addBall(4, onStrikeIndex)">4</button></td>
+      <td><button @click="addBall(5, onStrikeIndex)">5</button></td>
+      <td><button @click="addBall(6, onStrikeIndex)">6</button></td>
+    </tr>
+  </table>
 
+  <h3>Scorecard</h3>
   <table v-if="matchStarted">
     <tr>
       <th>Player</th>
@@ -66,10 +131,13 @@
     </tr>
     <tr v-for="player in players">
       <td>{{ player.firstName }} {{ player.lastName }}</td>
-      <td></td>
-      <td></td>
+      <td>{{ player.runs }}</td>
+      <td>{{ player.ballsFaced }}</td>
     </tr>
   </table>
 
-  <strong v-if="matchStarted">Total runs: {{ sum(balls.runs) }}</strong>
+  <strong v-if="matchStarted">Total runs: {{ totalRuns }}</strong>
+  <br />
+  <strong v-if="matchStarted">Overs: {{ formatOvers }}</strong>
+
 </template>
