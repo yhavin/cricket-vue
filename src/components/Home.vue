@@ -189,7 +189,7 @@
     
     <article>
       <h2>Scorecard</h2>
-      <button @click="startMatch">{{ matchStarted ? "End match" : "Start match" }} </button>
+      <button v-if="!matchStarted" @click="startMatch">Start match</button>
 
       <div>
         <table v-if="matchStarted" role="grid">
@@ -224,18 +224,20 @@
     
     <article>
       <h2>Ball-by-ball</h2>
-      <ul>
-        <article v-for="ball in reversedBalls">
-          {{ formatBall(ball) }}
-        </article>
-      </ul>
+      <details>
+        <summary role="button" class="secondary">Expand</summary>
+        <ul>
+          <article v-for="ball in reversedBalls">
+            {{ formatBall(ball) }}
+          </article>
+        </ul>
+      </details>
+      
     </article>
   </main>
   
 </template>
 
 <style>
-  .on-strike {
-    font-weight: bold;
-  }
+
 </style>
