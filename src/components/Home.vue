@@ -125,15 +125,19 @@
   <h1>Cricket Scoring</h1>
   <hr />
   <h2>Add players</h2>
-  <form @submit.prevent="addPlayer">
+  <div>
+    <form @submit.prevent="addPlayer">
     <input v-model="newPlayer.firstName" placeholder="First name">
     <input v-model="newPlayer.lastName" placeholder="Last name">
     <input v-model="newPlayer.team" placeholder="Team">
     <button>Add player</button>
   </form>
+  </div>
+
   <br />
 
-  <table class="table-outline">
+  <div>
+    <table class="table-outline">
     <tr>
       <th class="table-outline">Team 1</th>
       <th class="table-outline">Team 2</th>
@@ -143,6 +147,8 @@
       <td class="table-outline">{{ teamTwo[index]?.firstName }} {{ teamTwo[index]?.lastName }}</td>
     </tr>
   </table>
+  </div>
+
 
   <hr />
 
@@ -154,7 +160,9 @@
     </li>
   </ul>
   <h4>Enter ball event</h4>
-  <table>
+
+  <div>
+    <table>
     <tr>
       <td><button @click="addBall(0, onStrikeIndex)">0</button></td>
       <td><button @click="addBall(1, onStrikeIndex)">1</button></td>
@@ -166,6 +174,8 @@
       <td><button @click="addWicket(onStrikeIndex)">W</button></td>
     </tr>
   </table>
+  </div>
+  
 
   <hr />
   
@@ -173,7 +183,9 @@
   <button @click="startMatch">{{ matchStarted ? "End match" : "Start match" }} </button>
   <br />
   <br />
-  <table v-if="matchStarted" class="table-outline">
+
+  <div>
+    <table v-if="matchStarted" class="table-outline">
     <tr>
       <th class="table-outline">Player</th>
       <th class="table-outline">Out</th>
@@ -187,6 +199,8 @@
       <td class="table-outline">{{ player.ballsFaced }}</td>
     </tr>
   </table>
+  </div>
+  
   <br />
 
   <strong v-if="matchStarted">Score: {{ totalWickets }}/{{ totalRuns }}</strong>
