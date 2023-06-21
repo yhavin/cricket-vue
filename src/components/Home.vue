@@ -165,6 +165,7 @@
           </tbody>
         </table>
       </div>
+      <button v-if="!matchStarted" @click="startMatch">Start match</button>
     </article>
     
     <article>
@@ -189,8 +190,6 @@
     
     <article>
       <h2>Scorecard</h2>
-      <button v-if="!matchStarted" @click="startMatch">Start match</button>
-
       <div>
         <table v-if="matchStarted" role="grid">
           <thead>
