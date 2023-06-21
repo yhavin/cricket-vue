@@ -4,14 +4,7 @@
   let playerId = 0
   const newPlayer = ref({})
 
-  const players = ref([
-    { id: playerId++, firstName: "Player", lastName: "1", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "2", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "3", team: 1, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "4", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "5", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null },
-    { id: playerId++, firstName: "Player", lastName: "6", team: 2, isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null }
-  ])
+  const players = ref([])
 
   const teamOne = computed(() => {
     return players.value.filter(p => p.team === 1)
@@ -22,12 +15,8 @@
   })
 
   const addPlayer = () => {
-    players.value.push({ id: playerId++, firstName: newPlayer.value.firstName, lastName: newPlayer.value.lastName, team: Number(newPlayer.value.team), isBatting: false, isOnStrike: false, isOut: false, runs: null, ballsFaced: null })
+    players.value.push({ id: playerId++, firstName: newPlayer.value.firstName, lastName: newPlayer.value.lastName, team: Number(newPlayer.value.team), isBatting: false, isOnStrike: false, isOut: false, outString: null, runs: null, ballsFaced: null })
     newPlayer.value = {}
-  }
-
-  const removePlayer = (player) => {
-    players.value = players.value.filter((p) => p !== player)
   }
 
   const setIsBatting = (index) => {
@@ -122,93 +111,104 @@
 </script>
 
 <template>
-  <h1>Cricket Scoring</h1>
-  <hr />
-  <h2>Add players</h2>
-  <div>
-    <form @submit.prevent="addPlayer">
-    <input v-model="newPlayer.firstName" placeholder="First name">
-    <input v-model="newPlayer.lastName" placeholder="Last name">
-    <input v-model="newPlayer.team" placeholder="Team">
-    <button>Add player</button>
-  </form>
-  </div>
+  <main class="container">
+    <hgroup>
+      <h1>Cricket Scoring</h1>
+      <h3>Keep the score and lose the arguments</h3>
+    </hgroup>
+    
+    <article>
+      <h2>Add players</h2>
+      <form @submit.prevent="addPlayer">
+        <div class="grid">
+          <input v-model="newPlayer.firstName" placeholder="First name">
+          <input v-model="newPlayer.lastName" placeholder="Last name">
+          <input v-model="newPlayer.team" placeholder="Team">
+        </div>
+        <button>Add player</button>
+      </form>
+    </article>
+    
+    <article>
+      <h2>Teams</h2>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Team 1</th>
+              <th scope="col">Team 2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(player, index) in teamOne.length > teamTwo.length ? teamOne : teamTwo" :key="index">
+              <td>{{ teamOne[index]?.firstName }} {{ teamOne[index]?.lastName }}</td>
+              <td>{{ teamTwo[index]?.firstName }} {{ teamTwo[index]?.lastName }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+    
+    <article>
+      <h2>Live scoring</h2>
+      <ul>
+        <li v-for="(player, index) in currentBatsmen" :key="player.id" :class="{'on-strike': index === onStrikeIndex}">
+        <span :style="{fontWeight: index === onStrikeIndex ? 'bold' : 'normal'}">{{ player.firstName }} {{ player.lastName }}: {{ player.runs }} ({{ player.ballsFaced }})</span>
+        </li>
+      </ul>
 
-  <br />
+      <div class="grid">
+        <button @click="addBall(0, onStrikeIndex)">0</button>
+        <button @click="addBall(1, onStrikeIndex)">1</button>
+        <button @click="addBall(2, onStrikeIndex)">2</button>
+        <button @click="addBall(3, onStrikeIndex)">3</button>
+        <button @click="addBall(4, onStrikeIndex)">4</button>
+        <button @click="addBall(5, onStrikeIndex)">5</button>
+        <button @click="addBall(6, onStrikeIndex)">6</button>
+        <button @click="addWicket(onStrikeIndex)" class="contrast">W</button>
+      </div>
+    </article>
+    
+    <article>
+      <h2>Scorecard</h2>
+      <button @click="startMatch">{{ matchStarted ? "End match" : "Start match" }} </button>
 
-  <div>
-    <table class="table-outline">
-    <tr>
-      <th class="table-outline">Team 1</th>
-      <th class="table-outline">Team 2</th>
-    </tr>
-    <tr v-for="(player, index) in teamOne.length > teamTwo.length ? teamOne : teamTwo" :key="index">
-      <td class="table-outline">{{ teamOne[index]?.firstName }} {{ teamOne[index]?.lastName }}</td>
-      <td class="table-outline">{{ teamTwo[index]?.firstName }} {{ teamTwo[index]?.lastName }}</td>
-    </tr>
-  </table>
-  </div>
+      <div>
+        <table v-if="matchStarted" role="grid">
+          <thead>
+            <tr>
+              <th scope="col">Player</th>
+              <th style="text-align: center" scope="col">Status</th>
+              <th style="text-align: center" scope="col">Runs</th>
+              <th style="text-align: center" scope="col">Balls</th>
+              <th style="text-align: center" scope="col">S/R</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="player in teamOne">
+              <td>{{ player.firstName }} {{ player.lastName }}</td>
+              <td style="text-align: center">{{ player.isOut ? "out" : player.isBatting ? "not out" : null }}</td>
+              <td style="text-align: center">{{ player.runs }}</td>
+              <td style="text-align: center">{{ player.ballsFaced }}</td>
+              <td style="text-align: center">{{ player.ballsFaced !== null
+                            ? ((player.runs / player.ballsFaced) * 100).toFixed(2)
+                            : null}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <span v-if="matchStarted">Score: {{ totalWickets }}/{{ totalRuns }}</span>
+      <br />
+      <span v-if="matchStarted">Overs: {{ formatOvers }}</span>
+      <br />
+      <span v-if="matchStarted">This over: {{ thisOver.join(", ") }}</span>
+    </article>
+    
 
-
-  <hr />
-
-  <h2>Live scoring</h2>
-  <h4>Current batsmen</h4>
-  <ul>
-    <li v-for="(player, index) in currentBatsmen" :key="player.id" :class="{'on-strike': index === onStrikeIndex}">
-    <span :style="{fontWeight: index === onStrikeIndex ? 'bold' : 'normal'}">{{ player.firstName }} {{ player.lastName }}: {{ player.runs }} ({{ player.ballsFaced }})</span>
-    </li>
-  </ul>
-  <h4>Enter ball event</h4>
-
-  <div>
-    <table>
-    <tr>
-      <td><button @click="addBall(0, onStrikeIndex)">0</button></td>
-      <td><button @click="addBall(1, onStrikeIndex)">1</button></td>
-      <td><button @click="addBall(2, onStrikeIndex)">2</button></td>
-      <td><button @click="addBall(3, onStrikeIndex)">3</button></td>
-      <td><button @click="addBall(4, onStrikeIndex)">4</button></td>
-      <td><button @click="addBall(5, onStrikeIndex)">5</button></td>
-      <td><button @click="addBall(6, onStrikeIndex)">6</button></td>
-      <td><button @click="addWicket(onStrikeIndex)">W</button></td>
-    </tr>
-  </table>
-  </div>
+  </main>
   
-
-  <hr />
-  
-  <h2>Scorecard</h2>
-  <button @click="startMatch">{{ matchStarted ? "End match" : "Start match" }} </button>
-  <br />
-  <br />
-
-  <div>
-    <table v-if="matchStarted" class="table-outline">
-    <tr>
-      <th class="table-outline">Player</th>
-      <th class="table-outline">Out</th>
-      <th class="table-outline">Runs</th>
-      <th class="table-outline">Balls</th>
-    </tr>
-    <tr v-for="player in teamOne">
-      <td class="table-outline">{{ player.firstName }} {{ player.lastName }}</td>
-      <td class="table-outline">{{ player.isOut ? player.isOut : null }}</td>
-      <td class="table-outline">{{ player.runs }}</td>
-      <td class="table-outline">{{ player.ballsFaced }}</td>
-    </tr>
-  </table>
-  </div>
-  
-  <br />
-
-  <strong v-if="matchStarted">Score: {{ totalWickets }}/{{ totalRuns }}</strong>
-  <br />
-  <strong v-if="matchStarted">Overs: {{ formatOvers }}</strong>
-  <br />
-  <strong v-if="matchStarted">This over: {{ thisOver.join(", ") }}</strong>
-
 </template>
 
 <style>
