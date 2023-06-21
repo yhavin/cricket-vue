@@ -4,7 +4,11 @@
   let playerId = 0
   const newPlayer = ref({})
 
-  const players = ref([])
+  const players = ref([
+    { id: playerId++, firstName: "Shane", lastName: "Warne", team: 1, isBatting: false, isOnStrike: false, isOut: false, outString: null, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Ricky", lastName: "Ponting", team: 1, isBatting: false, isOnStrike: false, isOut: false, outString: null, runs: null, ballsFaced: null },
+    { id: playerId++, firstName: "Adam", lastName: "Gilchrist", team: 1, isBatting: false, isOnStrike: false, isOut: false, outString: null, runs: null, ballsFaced: null },
+  ])
 
   const teamOne = computed(() => {
     return players.value.filter(p => p.team === 1)
@@ -63,6 +67,7 @@
   const onStrikeId = ref('')
   const newBall = ref({})
   const balls = ref([])
+  const reversedBalls = computed(() => balls.value.slice().reverse())
 
   const thisOver = computed(() => {
     const currentOverBalls = balls.value.length % 6
@@ -103,6 +108,19 @@
     const currentOverBalls = balls.value.length % 6
     return completeOvers + "." + currentOverBalls
   })
+
+  const formatBall = (ball) => {
+    // Used 6.01 in following lines so that last ball of over is x.6 and next is x+1.1
+    const currentOverNumber = Math.floor((ball.id + 1) / 6.01)
+    const currentOverBalls = ((ball.id + 1) % 6.01).toFixed()
+    const formattedBallInOver = currentOverNumber + "." + currentOverBalls
+    const batter = players.value.filter(p => p.id === ball.batterId)[0]
+    if (!ball.isWicket) {
+      return `${formattedBallInOver}: ${batter.firstName} ${batter.lastName}, ${ball.runs} runs`
+    } else {
+      return `${formattedBallInOver}: ${batter.firstName} ${batter.lastName} is out`
+    }
+  }
 
   const totalRuns = ref(0)
 
@@ -190,9 +208,7 @@
               <td style="text-align: center">{{ player.isOut ? "out" : player.isBatting ? "not out" : null }}</td>
               <td style="text-align: center">{{ player.runs }}</td>
               <td style="text-align: center">{{ player.ballsFaced }}</td>
-              <td style="text-align: center">{{ player.ballsFaced !== null
-                            ? ((player.runs / player.ballsFaced) * 100).toFixed(2)
-                            : null}}
+              <td style="text-align: center">{{ player.ballsFaced !== null ? ((player.runs / player.ballsFaced) * 100).toFixed(2) : null}}
               </td>
             </tr>
           </tbody>
@@ -206,7 +222,14 @@
       <span v-if="matchStarted">This over: {{ thisOver.join(", ") }}</span>
     </article>
     
-
+    <article>
+      <h2>Ball-by-ball</h2>
+      <ul>
+        <article v-for="ball in reversedBalls">
+          {{ formatBall(ball) }}
+        </article>
+      </ul>
+    </article>
   </main>
   
 </template>
