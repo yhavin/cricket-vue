@@ -1,10 +1,16 @@
-# Backyard cricket scoring
+# Cricket scoring
 
-A lightweight application for live scoring backyard cricket matches.
+Keep the score and lose the arguments.
 
 ## Features
-- Add players on both teams
+- Add players and teams
 - Score each ball using runs and wickets
-- View current batsmen scores
-- View full scorecard
+- View current score summary
+- View full batting and bowling scorecard
+- View fall of wicket
 - Browse ball-by-ball history
+- Save matches
+- Export matches
+
+## Documentation
+[Structure and data model](https://docs.google.com/document/d/1iQNX3qz2iCW1e5qRmD9LrjwLczKc_pRPbWXkXRWHSQo/edit?usp=sharing)
