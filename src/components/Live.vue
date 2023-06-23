@@ -16,17 +16,26 @@
     players: []
   })
 
-  const matchStarted = ref(false)
-
   const handleAddPlayer = (player) => {
     console.log(player.value)
     matches.value.players.push(player.value)
     console.log(matches.value)
   }
 
+  const teamOne = computed(() => {
+    return matches.value.players.filter(p => p.team === "one")
+  })
+
+  const teamTwo = computed(() => {
+    return matches.value.players.filter(p => p.team === "two")
+  })
+
+  const matchStarted = ref(false)
+
   const handleStartMatch = () => {
     matchStarted.value = true
     console.log("Match started")
+
   }
   
 </script>
@@ -38,7 +47,7 @@
       <h3>Keep the score and lose the arguments</h3>
     </hgroup>
     
-    <PlayerForm @addPlayer="handleAddPlayer" />
+    <PlayerForm @addPlayer="handleAddPlayer" :teamOne="teamOne" :teamTwo="teamTwo" :matchStarted="matchStarted" />
 
     <Scoring :matchStarted="matchStarted" @startMatch="handleStartMatch" />
     

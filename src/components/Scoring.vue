@@ -1,12 +1,12 @@
 <script setup>
-  import { ref, computed } from "vue"
+  import { ref, toRef } from "vue"
 
 
   const props = defineProps({
     matchStarted: Boolean
   })
 
-  const { matchStarted } = props
+  const matchStarted = toRef(props, "matchStarted")
 
   const emit = defineEmits(["startMatch"])
 
