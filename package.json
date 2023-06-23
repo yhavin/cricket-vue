@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@picocss/pico": "^1.5.10",
+    "firebase": "^9.23.0",
     "vue": "^3.3.4"
   },
   "devDependencies": {

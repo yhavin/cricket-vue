@@ -1,5 +1,7 @@
 <script setup>
-  import { ref, computed } from 'vue'
+  import { ref, computed } from "vue"
+  import { db } from "../firebase.config.js"
+  import { collection, addDoc } from "firebase/firestore"
 
   let playerId = 0
   const newPlayer = ref({})

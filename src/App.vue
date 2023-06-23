@@ -1,9 +1,12 @@
 <script setup>
-import Home from './components/Home.vue'
+  import Home from './components/Home.vue'
+  import Live from './components/Live.vue';
+
 </script>
 
 <template>
-  <Home />
+  <!-- <Home /> -->
+  <Live />
 </template>
 
 <style scoped>
