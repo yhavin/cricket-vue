@@ -8,8 +8,9 @@
   const collectionName = "matches"
   const collectionRef = collection(db, collectionName)
 
-  const handleAddPlayer = (player) => {
-    console.log(player.value)
+  const handleAddPlayer = async (player) => {
+    const docRef = await addDoc(collectionRef, player.value)
+    console.log("Player written with ID: ", docRef.id)
   }
   
 </script>
