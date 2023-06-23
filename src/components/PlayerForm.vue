@@ -1,6 +1,7 @@
 <script setup>
   import { ref, toRefs } from "vue"
 
+
   const props = defineProps({
     teamOne: Array,
     teamTwo: Array,
@@ -11,11 +12,37 @@
   
   const emit = defineEmits(["addPlayer"])
 
-  const newPlayer = ref({})
+  const defaultPlayer = {
+    firstName: "",
+    lastName: "",
+    team: "",
+    batting: [
+      {
+        innings: 1,
+        isBatting: false,
+        isOnStrike: false,
+        isOut: false,
+        runs: null,
+        balls: null
+      }
+    ],
+    bowling: [
+      {
+        innings: 1,
+        isBowling: false,
+        balls: null,
+        runs: null,
+        wickets: null
+      }
+    ]
+  }
+  
+  const newPlayer = ref()
+  newPlayer.value = { ...defaultPlayer }
 
   const handleSubmit = () => {
     emit("addPlayer", newPlayer)
-    newPlayer.value = {}
+    newPlayer.value = { ...defaultPlayer }
   }
 
 </script>

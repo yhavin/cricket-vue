@@ -4,11 +4,12 @@
   import { collection, addDoc } from "firebase/firestore"
   import PlayerForm from "./PlayerForm.vue"
   import Scoring from "./Scoring.vue"
+  import BattingScoreboard from "./BattingScoreboard.vue"
 
   
   const collectionName = "matches"
   const collectionRef = collection(db, collectionName)
-
+  
   const matches = ref({
     date: "",
     result: "",
@@ -32,10 +33,11 @@
 
   const matchStarted = ref(false)
 
-  const handleStartMatch = () => {
+  const handleStartMatch = async () => {
     matchStarted.value = true
-    console.log("Match started")
-
+    matches.value.date = new Date()
+    const matchRef = await addDoc(collectionRef, matches.value)
+    console.log("Match started with ID", matchRef.id)
   }
   
 </script>
