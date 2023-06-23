@@ -25,24 +25,20 @@
     <h2>Setup match</h2>
     <form @submit.prevent="handleSubmit">
       <div class="grid">
-        <input v-model="newPlayer.firstName" placeholder="First name" required>
-        <input v-model="newPlayer.lastName" placeholder="Last name" required>
+        <input v-model="newPlayer.firstName" placeholder="First name" :disabled="matchStarted" required>
+        <input v-model="newPlayer.lastName" placeholder="Last name" :disabled="matchStarted" required>
       </div>
       <fieldset>
         <label for="one">
-          <input type="radio" id="one" value="one" v-model="newPlayer.team" checked>
+          <input type="radio" id="one" value="one" v-model="newPlayer.team" :disabled="matchStarted">
           Team 1
         </label>
         <label for="two">
-          <input type="radio" id="two" value="two" v-model="newPlayer.team" >
+          <input type="radio" id="two" value="two" v-model="newPlayer.team" :disabled="matchStarted">
           Team 2
         </label>
       </fieldset>
-      
-      
-      
-      <p></p>
-      <button>Add player</button>
+      <button :disabled="matchStarted">Add player</button>
     </form>
 
     <table>
