@@ -8,9 +8,17 @@
   const collectionName = "matches"
   const collectionRef = collection(db, collectionName)
 
-  const handleAddPlayer = async (player) => {
-    const docRef = await addDoc(collectionRef, player.value)
-    console.log("Player written with ID: ", docRef.id)
+  const matches = ref({
+    date: "",
+    result: "",
+    balls: [],
+    players: []
+  })
+
+  const handleAddPlayer = (player) => {
+    console.log(player.value)
+    matches.value.players.push(player.value)
+    console.log(matches.value)
   }
   
 </script>
