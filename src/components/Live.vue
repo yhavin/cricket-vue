@@ -3,6 +3,7 @@
   import { db } from "../firebase.config.js"
   import { collection, addDoc } from "firebase/firestore"
   import PlayerForm from "./PlayerForm.vue"
+  import Scoring from "./Scoring.vue"
 
   
   const collectionName = "matches"
@@ -15,10 +16,17 @@
     players: []
   })
 
+  const matchStarted = ref(false)
+
   const handleAddPlayer = (player) => {
     console.log(player.value)
     matches.value.players.push(player.value)
     console.log(matches.value)
+  }
+
+  const handleStartMatch = () => {
+    matchStarted.value = true
+    console.log("Match started")
   }
   
 </script>
@@ -31,6 +39,8 @@
     </hgroup>
     
     <PlayerForm @addPlayer="handleAddPlayer" />
+
+    <Scoring :matchStarted="matchStarted" @startMatch="handleStartMatch" />
     
     <!-- <article>
       <h2>Teams</h2>
