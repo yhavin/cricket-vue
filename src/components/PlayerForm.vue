@@ -1,20 +1,21 @@
 <script setup>
-  import { ref, computed } from "vue"
+  import { ref } from "vue"
 
+  const emit = defineEmits(["addPlayer"])
 
-  const props = defineProps({
-    newPlayer: Object,
-    addPlayer: Function
-  })
+  const newPlayer = ref({})
 
-  let { newPlayer, addPlayer } = props
+  const handleSubmit = () => {
+    emit("addPlayer", newPlayer)
+    newPlayer.value = {}
+  }
 
 </script>
 
 <template>
   <article>
     <h2>Add players</h2>
-    <form @submit.prevent="addPlayer">
+    <form @submit.prevent="handleSubmit">
       <div class="grid">
         <input v-model="newPlayer.firstName" placeholder="First name">
         <input v-model="newPlayer.lastName" placeholder="Last name">

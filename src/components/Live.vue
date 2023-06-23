@@ -8,11 +8,8 @@
   const collectionName = "matches"
   const collectionRef = collection(db, collectionName)
 
-  const newMatch = ref({})
-  const newPlayer = ref({})
-
-  const addPlayer = () => {
-    console.log(newPlayer.value)
+  const handleAddPlayer = (player) => {
+    console.log(player.value)
   }
   
 </script>
@@ -24,7 +21,7 @@
       <h3>Keep the score and lose the arguments</h3>
     </hgroup>
     
-    <PlayerForm :newPlayer="newPlayer" :addPlayer="addPlayer" />
+    <PlayerForm @addPlayer="handleAddPlayer" />
     
     <!-- <article>
       <h2>Teams</h2>
