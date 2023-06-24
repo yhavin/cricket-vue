@@ -12,7 +12,10 @@
   
   const emit = defineEmits(["addPlayer"])
 
+  let playerId = 0
+
   const defaultPlayer = {
+    id: playerId++,
     firstName: "",
     lastName: "",
     team: "",
@@ -58,11 +61,11 @@
       <fieldset>
         <label for="one">
           <input type="radio" id="one" value="one" v-model="newPlayer.team" :disabled="matchStarted">
-          Team 1
+          Team 1 — batting first
         </label>
         <label for="two">
           <input type="radio" id="two" value="two" v-model="newPlayer.team" :disabled="matchStarted">
-          Team 2
+          Team 2 — bowling first
         </label>
       </fieldset>
       <button :disabled="matchStarted">Add player</button>

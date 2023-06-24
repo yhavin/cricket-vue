@@ -1,7 +1,7 @@
 <script setup>
   import { ref, computed } from "vue"
   import { db } from "../firebase.config.js"
-  import { collection, addDoc } from "firebase/firestore"
+  import { collection, addDoc, updateDoc } from "firebase/firestore"
   import PlayerForm from "./PlayerForm.vue"
   import Scoring from "./Scoring.vue"
   import BattingScoreboard from "./BattingScoreboard.vue"
@@ -10,34 +10,34 @@
   const collectionName = "matches"
   const collectionRef = collection(db, collectionName)
   
-  const matches = ref({
+  const match = ref({
     date: "",
     result: "",
     balls: [],
     players: []
   })
 
+  const matchId = ref()
+  const matchStarted = ref(false)
+
   const handleAddPlayer = (player) => {
-    console.log(player.value)
-    matches.value.players.push(player.value)
-    console.log(matches.value)
+    match.value.players.push(player.value)
   }
 
   const teamOne = computed(() => {
-    return matches.value.players.filter(p => p.team === "one")
+    return match.value.players.filter(p => p.team === "one")
   })
 
   const teamTwo = computed(() => {
-    return matches.value.players.filter(p => p.team === "two")
+    return match.value.players.filter(p => p.team === "two")
   })
-
-  const matchStarted = ref(false)
 
   const handleStartMatch = async () => {
     matchStarted.value = true
-    matches.value.date = new Date()
-    const matchRef = await addDoc(collectionRef, matches.value)
-    console.log("Match started with ID", matchRef.id)
+    match.value.date = new Date()
+    const matchRef = await addDoc(collectionRef, match.value)
+    matchId.value = matchRef.id
+    console.log("Match started with ID", matchId.value)
   }
   
 </script>
